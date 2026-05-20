@@ -4,3 +4,4 @@ sqlalchemy
 psycopg[binary]
 pdfplumber
 python-dotenv
+pydantic-settings
