@@ -3,7 +3,6 @@ from pydantic import BaseModel, Field
 class ContractCreate(BaseModel):
     
     name: str = Field(min_length=1)
-    surname: str = Field(min_length=1)
     old_contract_number: str = Field(min_length=1)
     phone: str = Field(min_length=1)
     email: str | None = None

@@ -10,3 +10,5 @@ __pycache__/
 .idea/
 .DS_Store
 Thumbs.db
+.pytest_cache/
+debug_pdf_text.txtgit
