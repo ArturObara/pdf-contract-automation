@@ -9,3 +9,7 @@ class ContractCreate(BaseModel):
     postal_code: str = Field(min_length=1)
     city: str = Field(min_length=1)
     street: str = Field(min_length=1)
+
+class UpsellRequest(BaseModel):
+
+    old_contract_number: str = Field(min_length=1, description="Numer starej umowy, po którym szukamy klienta w bazie")

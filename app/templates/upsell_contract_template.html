@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Umowa Upsell - VertEnergia</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm 20mm;
+            @bottom-left {
+                content: "Wzor_VERT_UPSELL_2026 | Strona " counter(page) " z " counter(pages);
+                font-family: Arial, sans-serif;
+                font-size: 8pt;
+                color: #555;
+            }
+        }
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 9.5pt;
+            line-height: 1.4;
+            color: #000;
+        }
+        .header-table {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        .header-table td {
+            vertical-align: top;
+        }
+        .logo {
+            font-size: 16pt;
+            font-weight: bold;
+            color: #000;
+        }
+        .slogan {
+            text-align: right;
+            font-size: 9pt;
+            color: #444;
+            line-height: 1.2;
+        }
+        .title-section {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .title {
+            font-weight: bold;
+            font-size: 11pt;
+            margin-bottom: 3px;
+        }
+        .subtitle {
+            font-size: 10pt;
+        }
+        .text-justify {
+            text-align: justify;
+            margin-bottom: 15px;
+        }
+        .data-table {
+            width: 100%;
+            margin-left: 0;
+            margin-bottom: 15px;
+        }
+        .data-table td {
+            padding: 3px 0;
+            vertical-align: bottom;
+        }
+        .section-title {
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .services-list {
+            width: 100%;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+        .services-list td {
+            vertical-align: middle;
+            padding-bottom: 6px;
+            width: 50%;
+        }
+        .checkbox {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border: 1px solid #000;
+            margin-right: 5px;
+        }
+        .signatures {
+            width: 100%;
+            margin-top: 40px;
+        }
+        .signatures td {
+            text-align: center;
+            width: 50%;
+        }
+    </style>
+</head>
+<body>
+
+    <table class="header-table">
+        <tr>
+            <td class="logo">VertEnergia</td>
+            <td class="slogan">
+                Energia z przyszłości<br>
+                FOTOWOLTAIKA I USŁUGI ENERGETYCZNE
+            </td>
+        </tr>
+    </table>
+
+    <div class="title-section">
+        <div class="title">UMOWA NUMER: VERT/UP/{{ old_contract_number }}</div>
+        <div class="subtitle">na świadczenie usług dodatkowych („Umowa Upsell”)</div>
+    </div>
+
+    <div class="text-justify">
+        zawarta w dniu podpisania Umowy przez ostatnią z jej Stron pomiędzy:
+    </div>
+
+    <div class="text-justify">
+        <strong>VertEnergia Spółka z ograniczoną odpowiedzialnością</strong> z siedzibą w Poznaniu, ul. Zielona 12, 61-001 Poznań, wpisaną do rejestru przedsiębiorców Krajowego Rejestru Sądowego pod numerem KRS: 0000999888, NIP: 1234567891, REGON: 987654321, kapitał zakładowy: 100 000,00 PLN, reprezentowaną przez osobę należycie umocowaną do reprezentowania Spółki,
+    </div>
+
+    <div class="text-justify">
+        zwaną dalej <strong>„Wykonawcą”</strong>, a:
+    </div>
+
+    <table class="data-table">
+        <tr>
+            <td style="width: 160px;">Imię i nazwisko / Firma:</td>
+            <td colspan="3"><strong>{{ name }}</strong></td>
+        </tr>
+        <tr>
+            <td>zam. / siedziba przy ul.</td>
+            <td colspan="3"><strong>{{ street }}</strong></td>
+        </tr>
+        <tr>
+            <td>kod pocztowy:</td>
+            <td style="width: 100px;"><strong>{{ postal_code }}</strong></td>
+            <td style="width: 100px;">miejscowość:</td>
+            <td><strong>{{ city }}</strong></td>
+        </tr>
+        <tr>
+            <td>PESEL/NIP:</td>
+            <td>.............................</td>
+            <td>REGON:</td>
+            <td>.............................</td>
+        </tr>
+        <tr>
+            <td>tel.</td>
+            <td><strong>{{ phone }}</strong></td>
+            <td>e-mail:</td>
+            <td><strong>{{ email }}</strong></td>
+        </tr>
+    </table>
+
+    <div class="text-justify">
+        zwana dalej <strong>„Zamawiającym”</strong>, w dalszej części zwani łącznie <strong>„Stronami”</strong> bądź każde osobno <strong>„Stroną”</strong>.
+    </div>
+
+    <div class="section-title">§ 1. PRZEDMIOT UMOWY</div>
+    <div class="text-justify">
+        1. Zamawiający zleca, a Wykonawca zobowiązuje się do świadczenia wybranych poniżej usług dodatkowych (komercyjnych) związanych z posiadaną infrastrukturą energetyczną:
+    </div>
+
+    <table class="services-list">
+        <tr>
+            <td><div class="checkbox"></div> a) Mycie paneli PV (do 10 kWp)</td>
+            <td><div class="checkbox"></div> g) Konfiguracja aplikacji i falownika</td>
+        </tr>
+        <tr>
+            <td><div class="checkbox"></div> b) Mycie paneli PV (powyżej 10 kWp)</td>
+            <td><div class="checkbox"></div> h) Aktualizacja oprogramowania falownika</td>
+        </tr>
+        <tr>
+            <td><div class="checkbox"></div> c) Przegląd techniczny instalacji PV</td>
+            <td><div class="checkbox"></div> i) Wymiana zabezpieczeń AC/DC</td>
+        </tr>
+        <tr>
+            <td><div class="checkbox"></div> d) Przegląd techniczny magazynu energii</td>
+            <td><div class="checkbox"></div> j) Audyt poprawności uziemienia</td>
+        </tr>
+        <tr>
+            <td><div class="checkbox"></div> e) Przegląd techniczny pompy ciepła</td>
+            <td><div class="checkbox"></div> k) Zgłoszenie rozbudowy instalacji do OSD</td>
+        </tr>
+        <tr>
+            <td><div class="checkbox"></div> f) Pomiary elektryczne i termowizja</td>
+            <td><div class="checkbox"></div> l) Inne: ............................................</td>
+        </tr>
+    </table>
+
+    <div class="text-justify" style="margin-top: 10px;">
+        2. Szczegółowy zakres prac dla każdej z usług definiuje załącznik "Specyfikacja Usług Serwisowych", przekazywany Zamawiającemu drogą elektroniczną.<br><br>
+        3. Termin realizacji poszczególnych usług zostanie ustalony za pośrednictwem poczty elektronicznej e-mail przez dział harmonogramowania Wykonawcy.
+    </div>
+
+    <div class="section-title">§ 2. WYNAGRODZENIE I WARUNKI PŁATNOŚCI</div>
+    <div class="text-justify">
+        1. Całkowite zbiorcze wynagrodzenie Wykonawcy z tytułu realizacji wybranych w § 1 Usług wynosi łącznie: ............................ zł brutto ("Wynagrodzenie").<br><br>
+        2. Zamawiający zobowiązuje się do uregulowania należności na rachunek bankowy Wykonawcy wskazany w fakturze rozliczeniowej w terminie 7 dni od momentu poprawnego wykonania i odebrania prac przez Strony.<br><br>
+        3. Wszelkie ceny podane w niniejszej umowie są cenami brutto i zawierają należny podatek od towarów i usług (VAT).
+    </div>
+
+    <div class="section-title">§ 3. POSTANOWIENIA KOŃCOWE</div>
+    <div class="text-justify">
+        1. Niniejsza Umowa wchodzi w życie z dniem jej podpisania przez obie Strony. Odstąpienie od poszczególnych usług wymaga zgłoszenia drogą dokumentową na minimum 3 dni robocze przed planowanym przyjazdem serwisu.<br><br>
+        2. Wszelkie zmiany, uzupełnienia lub rozwiązanie niniejszej umowy wymagają zachowania formy dokumentowej pod rygorem nieważności.<br><br>
+        3. W sprawach nieuregulowanych niniejszą Umową zastosowanie mają odpowiednie przepisy Kodeksu Cywilnego.
+    </div>
+
+    <table class="signatures">
+        <tr>
+            <td>.......................................................<br>W imieniu Wykonawcy</td>
+            <td>.......................................................<br>Podpis Zamawiającego</td>
+        </tr>
+    </table>
+
+</body>
+</html>
