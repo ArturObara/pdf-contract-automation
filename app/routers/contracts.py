@@ -1,14 +1,12 @@
 from fastapi import APIRouter, Depends, UploadFile, File, HTTPException
-from fastapi.responses import FileResponse
+from fastapi.responses import Response
 from sqlalchemy.orm import Session
-from jinja2 import Environment, FileSystemLoader
-from weasyprint import HTML
 
 from app.database import get_db
 from app.models import Contract
 from app.schemas import ContractCreate, UpsellRequest
 from app.contract_extractor import extract_contract_data
-
+from app.contract_generator import generate_upsell_pdf
 
 
 router = APIRouter(prefix="/contracts", tags=["Contracts"])
@@ -22,9 +20,7 @@ def create_contract(contract: ContractCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_contract)
     
-
     return new_contract
-
 
 @router.post("/upload")
 def upload_contract_pdf(file: UploadFile = File(...), db: Session = Depends(get_db)):
@@ -44,14 +40,9 @@ def upload_contract_pdf(file: UploadFile = File(...), db: Session = Depends(get_
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Błąd podczas procesowania pliku PDF: {str(e)}")
-    
-
-template_env = Environment(loader=FileSystemLoader("app/templates"))
-
 
 @router.post("/generate-upsell")
 def generate_upsell(request: UpsellRequest, db: Session = Depends(get_db)):
-    
     client_contract = db.query(Contract).filter(Contract.old_contract_number == request.old_contract_number).first()
     
     if not client_contract:
@@ -67,16 +58,13 @@ def generate_upsell(request: UpsellRequest, db: Session = Depends(get_db)):
         "old_contract_number": client_contract.old_contract_number
     }
     
-    template = template_env.get_template("upsell_contract_template.html")
-    rendered_html = template.render(**client_data)
+    pdf_bytes = generate_upsell_pdf(client_data)
     
     safe_contract_number = request.old_contract_number.replace("/", "_")
     file_name = f"Umowa_Upsell_{safe_contract_number}.pdf"
     
-    HTML(string=rendered_html).write_pdf(file_name)
-    
-    return FileResponse(
-        path=file_name,
-        filename=file_name,
-        media_type="application/pdf"
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="{file_name}"'}
     )
