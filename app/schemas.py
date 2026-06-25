@@ -1,7 +1,6 @@
 from pydantic import BaseModel, Field
 
 class ContractCreate(BaseModel):
-    
     name: str = Field(min_length=1)
     old_contract_number: str = Field(min_length=1)
     phone: str = Field(min_length=1)
@@ -11,5 +10,7 @@ class ContractCreate(BaseModel):
     street: str = Field(min_length=1)
 
 class UpsellRequest(BaseModel):
-
-    old_contract_number: str = Field(min_length=1, description="Numer starej umowy, po którym szukamy klienta w bazie")
+    old_contract_number: str = Field(
+        min_length=1, 
+        description="The original contract number used to locate the client in the database"
+    )
