@@ -5,8 +5,6 @@ def extract_contract_data(file_stream) -> dict:
     with pdfplumber.open(file_stream) as pdf:
         first_page = pdf.pages[0]
         text = first_page.extract_text()
-        with open("debug_pdf_text.txt", "w", encoding="utf-8") as f:
-            f.write(text)
 
         match_contract_old = re.search(r"Numer umowy:[\s\n]*(?P<contract_number>[\w/-]+)", text)
         match_name = re.search(r"Imię i nazwisko / Firma:\s*(?P<name>[^\n]+)", text)
