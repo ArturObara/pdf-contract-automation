@@ -58,33 +58,63 @@
             width: 100%;
             margin-left: 0;
             margin-bottom: 15px;
+            border-collapse: collapse;
         }
         .data-table td {
-            padding: 3px 0;
+            padding: 6px 0;
             vertical-align: bottom;
+        }
+        .data-value {
+            border-bottom: 1px dotted #aaa;
+        }
+        .blank-space {
+            display: inline-block;
+            border-bottom: 1px dotted #000;
+            width: 90%;
+            height: 15px;
         }
         .section-title {
             font-weight: bold;
-            margin-top: 20px;
-            margin-bottom: 10px;
+            font-size: 11pt;
+            color: #27ae60;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 4px;
         }
         .services-list {
             width: 100%;
             margin-top: 10px;
             margin-bottom: 15px;
         }
-        .services-list td {
-            vertical-align: middle;
-            padding-bottom: 6px;
+.services-list td {
+            vertical-align: baseline; 
+            padding-bottom: 8px;
             width: 50%;
         }
-        .checkbox {
+        
+        input[type="checkbox"] {
             display: inline-block;
-            width: 10px;
-            height: 10px;
-            border: 1px solid #000;
-            margin-right: 5px;
+            width: 12px;
+            height: 12px;
+            margin: 0;
+            margin-right: 6px;
+            vertical-align: middle;
         }
+        
+        input[type="text"].price-input {
+            display: inline-block;
+            width: 100px;
+            border: none;
+            border-bottom: 1px dashed #000;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            font-size: 9.5pt;
+            background: transparent;
+            margin: 0 5px;
+            vertical-align: baseline;
+        }
+        
         .signatures {
             width: 100%;
             margin-top: 40px;
@@ -99,7 +129,7 @@
 
     <table class="header-table">
         <tr>
-            <td class="logo">VertEnergia</td>
+            <td class="logo"><span style="color: #27ae60;">Vert</span>Energia</td>
             <td class="slogan">
                 Energia z przyszłości<br>
                 FOTOWOLTAIKA I USŁUGI ENERGETYCZNE
@@ -126,30 +156,28 @@
 
     <table class="data-table">
         <tr>
-            <td style="width: 160px;">Imię i nazwisko / Firma:</td>
-            <td colspan="3"><strong>{{ name }}</strong></td>
+            <td style="width: 20%;">Imię i nazwisko / Firma:</td>
+            <td colspan="3" class="data-value"><strong>{{ name }}</strong></td>
         </tr>
         <tr>
             <td>zam. / siedziba przy ul.</td>
-            <td colspan="3"><strong>{{ street }}</strong></td>
+            <td colspan="3" class="data-value"><strong>{{ street }}</strong></td>
         </tr>
         <tr>
             <td>kod pocztowy:</td>
-            <td style="width: 100px;"><strong>{{ postal_code }}</strong></td>
-            <td style="width: 100px;">miejscowość:</td>
-            <td><strong>{{ city }}</strong></td>
+            <td style="width: 30%;" class="data-value"><strong>{{ postal_code }}</strong></td>
+            <td style="width: 15%; text-align: right; padding-right: 10px;">miejscowość:</td>
+            <td style="width: 35%;" class="data-value"><strong>{{ city }}</strong></td>
         </tr>
         <tr>
             <td>PESEL/NIP:</td>
-            <td>.............................</td>
-            <td>REGON:</td>
-            <td>.............................</td>
+            <td colspan="3"><span class="blank-space" style="width: 45%;"></span></td>
         </tr>
         <tr>
             <td>tel.</td>
-            <td><strong>{{ phone }}</strong></td>
-            <td>e-mail:</td>
-            <td><strong>{{ email }}</strong></td>
+            <td class="data-value"><strong>{{ phone }}</strong></td>
+            <td style="text-align: right; padding-right: 10px;">e-mail:</td>
+            <td class="data-value"><strong>{{ email }}</strong></td>
         </tr>
     </table>
 
@@ -164,28 +192,28 @@
 
     <table class="services-list">
         <tr>
-            <td><div class="checkbox"></div> a) Mycie paneli PV (do 10 kWp)</td>
-            <td><div class="checkbox"></div> g) Konfiguracja aplikacji i falownika</td>
+            <td><input type="checkbox" name="srv_a"> a) Mycie paneli PV (do 10 kWp)</td>
+            <td><input type="checkbox" name="srv_g"> g) Konfiguracja aplikacji i falownika</td>
         </tr>
         <tr>
-            <td><div class="checkbox"></div> b) Mycie paneli PV (powyżej 10 kWp)</td>
-            <td><div class="checkbox"></div> h) Aktualizacja oprogramowania falownika</td>
+            <td><input type="checkbox" name="srv_b"> b) Mycie paneli PV (powyżej 10 kWp)</td>
+            <td><input type="checkbox" name="srv_h"> h) Aktualizacja oprogramowania falownika</td>
         </tr>
         <tr>
-            <td><div class="checkbox"></div> c) Przegląd techniczny instalacji PV</td>
-            <td><div class="checkbox"></div> i) Wymiana zabezpieczeń AC/DC</td>
+            <td><input type="checkbox" name="srv_c"> c) Przegląd techniczny instalacji PV</td>
+            <td><input type="checkbox" name="srv_i"> i) Wymiana zabezpieczeń AC/DC</td>
         </tr>
         <tr>
-            <td><div class="checkbox"></div> d) Przegląd techniczny magazynu energii</td>
-            <td><div class="checkbox"></div> j) Audyt poprawności uziemienia</td>
+            <td><input type="checkbox" name="srv_d"> d) Przegląd techniczny magazynu energii</td>
+            <td><input type="checkbox" name="srv_j"> j) Audyt poprawności uziemienia</td>
         </tr>
         <tr>
-            <td><div class="checkbox"></div> e) Przegląd techniczny pompy ciepła</td>
-            <td><div class="checkbox"></div> k) Zgłoszenie rozbudowy instalacji do OSD</td>
+            <td><input type="checkbox" name="srv_e"> e) Przegląd techniczny pompy ciepła</td>
+            <td><input type="checkbox" name="srv_k"> k) Zgłoszenie rozbudowy instalacji do OSD</td>
         </tr>
         <tr>
-            <td><div class="checkbox"></div> f) Pomiary elektryczne i termowizja</td>
-            <td><div class="checkbox"></div> l) Inne: ............................................</td>
+            <td><input type="checkbox" name="srv_f"> f) Pomiary elektryczne i termowizja</td>
+            <td><input type="checkbox" name="srv_l"> l) Inne: <input type="text" name="inne_opis" class="price-input" style="width: 150px;"></td>
         </tr>
     </table>
 
@@ -196,7 +224,7 @@
 
     <div class="section-title">§ 2. WYNAGRODZENIE I WARUNKI PŁATNOŚCI</div>
     <div class="text-justify">
-        1. Całkowite zbiorcze wynagrodzenie Wykonawcy z tytułu realizacji wybranych w § 1 Usług wynosi łącznie: ............................ zł brutto ("Wynagrodzenie").<br><br>
+        1. Całkowite zbiorcze wynagrodzenie Wykonawcy z tytułu realizacji wybranych w § 1 Usług wynosi łącznie: <input type="text" name="total_price" class="price-input"> zł brutto ("Wynagrodzenie").<br><br>
         2. Zamawiający zobowiązuje się do uregulowania należności na rachunek bankowy Wykonawcy wskazany w fakturze rozliczeniowej w terminie 7 dni od momentu poprawnego wykonania i odebrania prac przez Strony.<br><br>
         3. Wszelkie ceny podane w niniejszej umowie są cenami brutto i zawierają należny podatek od towarów i usług (VAT).
     </div>
