@@ -11,4 +11,5 @@ __pycache__/
 .DS_Store
 Thumbs.db
 .pytest_cache/
-debug_pdf_text.txtgit
+*.pdf
+!app/tests/fixtures/*.pdf
