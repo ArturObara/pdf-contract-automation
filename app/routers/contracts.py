@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, UploadFile, File, HTTPException
 from fastapi.responses import Response
 from sqlalchemy.orm import Session
+from sqlalchemy import select
 from pydantic import ValidationError
 
 from app.database import get_db
@@ -25,7 +26,7 @@ def create_contract(contract: ContractCreate, db: Session = Depends(get_db)):
 @router.post("/upload")
 def upload_contract_pdf(file: UploadFile = File(...), db: Session = Depends(get_db)):
     if not file.filename.endswith(".pdf"):
-        raise HTTPException(status_code=400, detail="Przesłany plik musi być formatu PDF.")
+        raise HTTPException(status_code=400, detail="Uploaded file must be a PDF.")
     
     try:
         extracted_data = extract_contract_data(file.file)
@@ -43,14 +44,16 @@ def upload_contract_pdf(file: UploadFile = File(...), db: Session = Depends(get_
         
     except Exception as e:
         db.rollback()
-        raise HTTPException(status_code=500, detail=f"Krytyczny błąd podczas procesowania pliku PDF: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Critical error processing PDF file: {str(e)}")
 
 @router.post("/generate-upsell")
 def generate_upsell(request: UpsellRequest, db: Session = Depends(get_db)):
-    client_contract = db.query(Contract).filter(Contract.old_contract_number == request.old_contract_number).first()
+    # NOWOCZESNE ZAPYTANIE SQLALCHEMY 2.0
+    stmt = select(Contract).where(Contract.old_contract_number == request.old_contract_number)
+    client_contract = db.execute(stmt).scalars().first()
     
     if not client_contract:
-        raise HTTPException(status_code=404, detail="Brak starej umowy w bazie danych!")
+        raise HTTPException(status_code=404, detail="Old contract not found in the database.")
 
     client_data = {
         "name": client_contract.name,
