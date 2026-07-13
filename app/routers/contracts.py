@@ -44,7 +44,11 @@ def upload_contract_pdf(file: UploadFile = File(...), db: Session = Depends(get_
         
     except Exception as e:
         db.rollback()
-        raise HTTPException(status_code=500, detail=f"Critical error processing PDF file: {str(e)}")
+        print(f"CRITICAL ERROR [Upload PDF]: {str(e)}")
+        raise HTTPException(
+            status_code=500, 
+            detail="Wystąpił wewnętrzny błąd serwera podczas przetwarzania dokumentu."
+        )
 
 @router.post("/generate-upsell")
 def generate_upsell(request: UpsellRequest, db: Session = Depends(get_db)):
