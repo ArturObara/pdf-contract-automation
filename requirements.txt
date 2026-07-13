@@ -80,3 +80,4 @@ weasyprint==68.1
 webencodings==0.5.1
 websockets==16.0
 zopfli==0.4.2
+httpx
