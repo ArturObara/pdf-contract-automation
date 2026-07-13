@@ -6,13 +6,13 @@ from pydantic import ValidationError
 
 from app.database import get_db
 from app.models import Contract
-from app.schemas import ContractCreate, UpsellRequest
+from app.schemas import ContractCreate, UpsellRequest, ContractResponse
 from app.contract_extractor import extract_contract_data
 from app.contract_generator import generate_upsell_pdf
 
 router = APIRouter(prefix="/contracts", tags=["Contracts"])
 
-@router.post("/")
+@router.post("/", response_model=ContractResponse)
 def create_contract(contract: ContractCreate, db: Session = Depends(get_db)):
     contract_dict = contract.model_dump()
     new_contract = Contract(**contract_dict)
@@ -23,7 +23,7 @@ def create_contract(contract: ContractCreate, db: Session = Depends(get_db)):
     
     return new_contract
 
-@router.post("/upload")
+@router.post("/upload", response_model=ContractResponse)
 def upload_contract_pdf(file: UploadFile = File(...), db: Session = Depends(get_db)):
     if not file.filename.endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Uploaded file must be a PDF.")
@@ -48,7 +48,6 @@ def upload_contract_pdf(file: UploadFile = File(...), db: Session = Depends(get_
 
 @router.post("/generate-upsell")
 def generate_upsell(request: UpsellRequest, db: Session = Depends(get_db)):
-    # NOWOCZESNE ZAPYTANIE SQLALCHEMY 2.0
     stmt = select(Contract).where(Contract.old_contract_number == request.old_contract_number)
     client_contract = db.execute(stmt).scalars().first()
     

@@ -1,5 +1,4 @@
-from pydantic import BaseModel, Field, EmailStr, ValidationError, ConfigDict
-from contract_extractor import extract_contract_data
+from pydantic import BaseModel, Field, EmailStr, ConfigDict
 
 class ContractCreate(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True)
@@ -13,29 +12,12 @@ class ContractCreate(BaseModel):
     city: str = Field(min_length=2)
     street: str = Field(min_length=2)
 
+class ContractResponse(ContractCreate):
+    id: int
+    model_config = ConfigDict(from_attributes=True)
+
 class UpsellRequest(BaseModel):
     old_contract_number: str = Field(
         min_length=1, 
         description="The original contract number used to locate the client in the database"
     )
-
-def handle_uploaded_contract(file_stream):
-    try:
-        raw_data = extract_contract_data(file_stream)
-    except Exception as e:
-        return {
-            "status": "error", 
-            "message": "Błąd odczytu pliku PDF. Plik może być uszkodzony, zaszyfrowany lub nie jest to dokument tekstowy.", 
-            "details": str(e)
-        }
-
-    try:
-        contract = ContractCreate(**raw_data)
-        return {"status": "success", "data": contract.model_dump()}
-        
-    except ValidationError as e:
-        return {
-            "status": "error", 
-            "message": "Błąd walidacji. PDF nie zawiera wszystkich wymaganych danych lub mają one nieprawidłowy format.", 
-            "details": e.errors()
-        }
