@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends, UploadFile, File, HTTPException
+import logging
+from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, status
+from sqlalchemy.exc import IntegrityError
 from fastapi.responses import Response
 from sqlalchemy.orm import Session
 from sqlalchemy import select
@@ -10,17 +12,24 @@ from app.schemas import ContractCreate, UpsellRequest, ContractResponse
 from app.contract_extractor import extract_contract_data
 from app.contract_generator import generate_upsell_pdf
 
+
+logger = logging.getLogger(__name__)
+
 router = APIRouter(prefix="/contracts", tags=["Contracts"])
 
 @router.post("/", response_model=ContractResponse)
 def create_contract(contract: ContractCreate, db: Session = Depends(get_db)):
-    contract_dict = contract.model_dump()
-    new_contract = Contract(**contract_dict)
-
+    new_contract = Contract(**contract.model_dump())
     db.add(new_contract)
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT, 
+            detail="Umowa o tym numerze już istnieje."
+        )
     db.refresh(new_contract)
-    
     return new_contract
 
 @router.post("/upload", response_model=ContractResponse)
@@ -42,9 +51,16 @@ def upload_contract_pdf(file: UploadFile = File(...), db: Session = Depends(get_
     except ValidationError as e:
         raise HTTPException(status_code=422, detail=e.errors())
         
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT, 
+            detail="Umowa o tym numerze już istnieje."
+        )
+        
     except Exception as e:
         db.rollback()
-        print(f"CRITICAL ERROR [Upload PDF]: {str(e)}")
+        logger.error(f"CRITICAL ERROR [Upload PDF]: {str(e)}", exc_info=True)
         raise HTTPException(
             status_code=500, 
             detail="Wystąpił wewnętrzny błąd serwera podczas przetwarzania dokumentu."
