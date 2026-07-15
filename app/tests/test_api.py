@@ -21,7 +21,7 @@ def test_generate_happy_path(test_db):
 
 
 def test_generate_upsell_returns_404(test_db):
-    response = test_db.post("/contracts/generate-upsell", json={"old_contract_number": "NIE ISTNIEJE"})
+    response = test_db.post("/contracts/generate-upsell", json={"old_contract_number": "DOES_NOT_EXIST"})
     assert response.status_code == 404
 
 

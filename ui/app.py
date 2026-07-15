@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 import os
 
-st.set_page_config(page_title="VertEnergia S.A. - Dashboard")
+st.set_page_config(page_title="VertEnergia - Dashboard")
 
 st.title("Upsell Contract Generator")
 st.markdown("Enter the base contract number from the system to automatically generate and download the new PDF document.")

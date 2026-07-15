@@ -27,7 +27,7 @@ def create_contract(contract: ContractCreate, db: Session = Depends(get_db)):
         db.rollback()
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT, 
-            detail="Umowa o tym numerze już istnieje."
+            detail="Contract with this number already exists."
         )
     db.refresh(new_contract)
     return new_contract
@@ -55,7 +55,7 @@ def upload_contract_pdf(file: UploadFile = File(...), db: Session = Depends(get_
         db.rollback()
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT, 
-            detail="Umowa o tym numerze już istnieje."
+            detail="Contract with this number already exists."
         )
         
     except Exception as e:
@@ -63,7 +63,7 @@ def upload_contract_pdf(file: UploadFile = File(...), db: Session = Depends(get_
         logger.error(f"CRITICAL ERROR [Upload PDF]: {str(e)}", exc_info=True)
         raise HTTPException(
             status_code=500, 
-            detail="Wystąpił wewnętrzny błąd serwera podczas przetwarzania dokumentu."
+            detail="An internal server error occurred while processing the document."
         )
 
 @router.post("/generate-upsell")

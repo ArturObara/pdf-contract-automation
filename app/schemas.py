@@ -5,7 +5,7 @@ class ContractCreate(BaseModel):
 
     name: str = Field(min_length=2)
     old_contract_number: str = Field(min_length=1)
-    pesel: str = Field(pattern=r"^\d{10,11}$", description="Dokładnie 10 (NIP) lub 11 (PESEL) cyfr")
+    pesel: str = Field(pattern=r"^\d{10,11}$", description="Exactly 10 (NIP) or 11 (PESEL) digits")
     phone: str = Field(pattern=r"^[+\d][\d\s\-]{6,}$")
     email: EmailStr | None = None
     postal_code: str = Field(pattern=r"^\d{2}-\d{3}$")

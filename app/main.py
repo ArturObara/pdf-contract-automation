@@ -8,4 +8,4 @@ app.include_router(contracts.router)
 
 @app.get("/")
 async def root():
-    return {"message": "API umów fotowoltaicznych działa!"}
+    return {"message": "API is running!"}
