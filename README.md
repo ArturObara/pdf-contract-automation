@@ -1,5 +1,5 @@
 # pdf-contract-automation
- Tool for pdf documents automation
+> Tool for pdf documents automation
 
 ## 1. Overview
 This is an internal tool built to automate the generation of new contracts. It automatically extracts client data from legacy PDF documents and dynamically creates new PDF agreements, saving time and eliminating manual data entry for the sales department.
@@ -26,7 +26,7 @@ Follow these steps to run the project locally using Docker.
 
 ```bash
 # 1. Clone the repository
-git clone [https://github.com/yourusername/pdf-contract-automation.git](https://github.com/yourusername/pdf-contract-automation.git)
+git clone https://github.com/ArturObara/pdf-contract-automation.git
 cd pdf-contract-automation
 
 # 2. Set up environment variables

@@ -6,13 +6,18 @@ services:
     container_name: pv_postgres_db
     restart: always
     environment:
-      POSTGRES_USER: artur_user
-      POSTGRES_PASSWORD: secure_password123
-      POSTGRES_DB: pv_contracts
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
-      - "5433:5432"
+      - "${POSTGRES_PORT}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
       
   web:
     build: .
@@ -21,9 +26,14 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql://artur_user:secure_password123@db:5432/pv_contracts
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   ui:
     build: .
