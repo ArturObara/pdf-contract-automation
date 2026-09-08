@@ -1,6 +1,10 @@
 import re
 import pdfplumber
 from pypdf import PdfReader
+import logging
+from app.ai_service import extract_contract_data_with_ai
+
+logger = logging.getLogger(__name__)
 
 ACROFORM_FIELD_MAP = {
     "name": "klient_nazwa",
@@ -83,4 +87,9 @@ def extract_contract_data(file_stream) -> dict:
     with pdfplumber.open(file_stream) as pdf:
         text = pdf.pages[0].extract_text() or ""
 
-    return _extract_from_flat_text(text)
+    try:
+        logger.info("Attempting data extraction with Gemini AI...")
+        return extract_contract_data_with_ai(text)
+    except Exception as e:
+        logger.warning("AI extraction failed (%s). Falling back to regex parser...", str(e))
+        return _extract_from_flat_text(text)
