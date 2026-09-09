@@ -31,7 +31,7 @@ Follow these steps to run the project locally using Docker.
 
 ```bash
 # 1. Clone the repository
-git clone [https://github.com/ArturObara/pdf-contract-automation.git](https://github.com/ArturObara/pdf-contract-automation.git)
+git clone https://github.com/ArturObara/pdf-contract-automation.git
 cd pdf-contract-automation
 
 # 2. Set up environment variables

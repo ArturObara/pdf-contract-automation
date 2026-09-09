@@ -6,15 +6,19 @@ from app.schemas import ContractCreate
 
 logger = logging.getLogger(__name__)
 
-api_key = os.environ.get("GEMINI_API_KEY")
-if not api_key:
-    logger.warning("GEMINI_API_KEY environment variable is not set.")
+GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
 
-client = genai.Client(api_key=api_key) if api_key else None
+
+def _get_client() -> genai.Client:
+    api_key = os.environ.get("GEMINI_API_KEY")
+    if not api_key:
+        logger.error("GEMINI_API_KEY environment variable is not set.")
+        raise ValueError("GEMINI_API_KEY environment variable is not set.")
+    return genai.Client(api_key=api_key)
+
 
 def extract_contract_data_with_ai(dirty_text: str) -> dict:
-    if not client:
-        raise ValueError("Gemini client is not initialized (missing API key).")
+    client = _get_client()
 
     prompt = f"""
     You are a precision OCR and data extraction system for a renewable energy company.
@@ -32,7 +36,7 @@ def extract_contract_data_with_ai(dirty_text: str) -> dict:
     """
 
     response = client.models.generate_content(
-        model="gemini-2.5-flash",
+        model=GEMINI_MODEL,
         contents=prompt,
         config=types.GenerateContentConfig(
             response_mime_type="application/json",
