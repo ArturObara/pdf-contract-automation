@@ -1,6 +1,8 @@
 # pdf-contract-automation
 
-Tool for pdf documents automation
+![Tests](https://github.com/ArturObara/pdf-contract-automation/actions/workflows/tests.yml/badge.svg)
+
+AI-assisted tool that extracts client data from legacy PDF contracts and generates new contracts automatically.
 
 ## 1. Overview
 
