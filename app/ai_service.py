@@ -1,19 +1,17 @@
-import os
 import logging
 from google import genai
 from google.genai import types
+from app.config import settings
 from app.schemas import ContractCreate
 
 logger = logging.getLogger(__name__)
 
-GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
-
 
 def _get_client() -> genai.Client:
-    api_key = os.environ.get("GEMINI_API_KEY")
+    api_key = settings.GEMINI_API_KEY
     if not api_key:
-        logger.error("GEMINI_API_KEY environment variable is not set.")
-        raise ValueError("GEMINI_API_KEY environment variable is not set.")
+        logger.error("GEMINI_API_KEY is not set.")
+        raise ValueError("GEMINI_API_KEY is not set.")
     return genai.Client(api_key=api_key)
 
 
@@ -29,14 +27,14 @@ def extract_contract_data_with_ai(dirty_text: str) -> dict:
     - 'postal_code': format XX-XXX.
     - 'phone': phone number with or without country prefix.
     - 'email': valid email address string, or null if not found.
-    - Treat references to 'VertEnergia S.A.' as template data, not customer data.
+     - Treat any references to 'VertEnergia' (the company, its address, NIP, KRS) as template data, not customer data.
     
     Contract text:
     {dirty_text}
     """
 
     response = client.models.generate_content(
-        model=GEMINI_MODEL,
+        model=settings.GEMINI_MODEL,
         contents=prompt,
         config=types.GenerateContentConfig(
             response_mime_type="application/json",

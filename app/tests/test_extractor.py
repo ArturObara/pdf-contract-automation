@@ -65,10 +65,12 @@ def test_should_fallback_to_regex_when_ai_fails(mock_ai, mock_acroform):
     assert "name" in result
 
 
-def test_extract_empty_document():
+@patch("app.contract_extractor.extract_contract_data_with_ai",
+       side_effect=Exception("AI disabled in tests"))
+def test_extract_empty_document(mock_ai):
     current_dir = os.path.dirname(__file__)
     empty_pdf_path = os.path.join(current_dir, "fixtures", "empty_contract.pdf")
-    
+
     assert os.path.exists(empty_pdf_path), f"File not found at: {empty_pdf_path}"
 
     with open(empty_pdf_path, "rb") as file_stream:

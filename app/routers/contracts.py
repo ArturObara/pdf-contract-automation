@@ -34,7 +34,7 @@ def create_contract(contract: ContractCreate, db: Session = Depends(get_db)):
 
 @router.post("/upload", response_model=ContractResponse)
 def upload_contract_pdf(file: UploadFile = File(...), db: Session = Depends(get_db)):
-    if not file.filename.endswith(".pdf"):
+    if not file.filename or not file.filename.lower().endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Uploaded file must be a PDF.")
     
     try:
