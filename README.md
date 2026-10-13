@@ -52,6 +52,13 @@ Once the containers are successfully running, the system is available at:
 - **FastAPI Docs (Swagger UI):** http://localhost:8000/docs
 - **PostgreSQL Database:** localhost:5433 (accessible with DB clients like DBeaver using credentials from `.env`)
 
+Contracts are uploaded via Swagger UI (`POST /contracts/upload`). The Streamlit dashboard is used to generate a new upsell contract from an existing record.
+
+**Typical workflow:**
+1. Upload a legacy contract PDF via Swagger UI (`POST /contracts/upload`).
+2. Open the Streamlit dashboard and enter the old contract number.
+3. Download the generated upsell contract.
+
 ## 6. Testing
 
 The project includes unit and integration tests. It uses an in-memory SQLite database to test API endpoints and PDF extraction logic in complete isolation.
