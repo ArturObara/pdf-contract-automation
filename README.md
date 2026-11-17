@@ -13,8 +13,8 @@ This is an internal tool built to automate the generation of new contracts. It a
 - **PDF Data Extraction:** Extracts data from legacy PDF contracts using Google Gemini API by default for structured field recognition, with native support for PDF form fields (AcroForms) and regex fallback using `pdfplumber` and `pypdf`.
 - **Dynamic PDF Generation:** Renders new, print-ready PDF documents from HTML templates using WeasyPrint and Jinja2.
 - **REST API:** Built with FastAPI, featuring automatic Swagger documentation and strict data validation with Pydantic schemas.
-- **Interactive UI:** A lightweight Streamlit dashboard allowing users to quickly generate and download new contracts.
-- **Database Management:** PostgreSQL with SQLAlchemy ORM and Alembic for automated database migrations.
+- **Interactive UI:** A Streamlit dashboard covering the whole flow: upload a legacy PDF, review the extracted data, then generate and download the new contract.
+- **Database Management:** PostgreSQL with SQLAlchemy ORM; Alembic migrations are applied automatically on container start.
 - **Fully Dockerized:** Containerized setup for the database, API, and frontend ensures a consistent local development environment.
 
 ## 3. Tech Stack
@@ -29,37 +29,37 @@ This is an internal tool built to automate the generation of new contracts. It a
 
 ## 4. Quick Start / Setup
 
-Follow these steps to run the project locally using Docker.
+One command starts the database, the API and the dashboard. Database migrations run automatically when the API container starts.
 
 ```bash
-# 1. Clone the repository
 git clone https://github.com/ArturObara/pdf-contract-automation.git
 cd pdf-contract-automation
 
-# 2. Set up environment variables
+docker compose up --build
+```
+
+That's it. Without a `.env` file the stack uses built-in defaults, and extraction falls back to the regex parser.
+
+To enable Gemini-based extraction or change credentials, create a `.env` first:
+
+```bash
 cp .env.example .env
-# Note: Ensure POSTGRES_PORT=5433 and GEMINI_API_KEY are set in your .env file.
-
-# 3. Spin up the containers
-docker-compose up -d --build
-
-# 4. Run Database Migrations (inside the API container)
-docker exec -it pv_fastapi_app alembic upgrade head
+# set GEMINI_API_KEY (and optionally the POSTGRES_* values)
 ```
 
 ## 5. Accessing the App
 
-Once the containers are successfully running, the system is available at:
+Once the containers are running:
 - **Streamlit Dashboard (UI):** http://localhost:8501
 - **FastAPI Docs (Swagger UI):** http://localhost:8000/docs
-- **PostgreSQL Database:** localhost:5433 (accessible with DB clients like DBeaver using credentials from `.env`)
+- **PostgreSQL Database:** localhost:5433 (credentials from `.env`, or the defaults in `docker-compose.yml`)
 
-Contracts are uploaded via Swagger UI (`POST /contracts/upload`). The Streamlit dashboard is used to generate a new upsell contract from an existing record.
-
-**Typical workflow:**
-1. Upload a legacy contract PDF via Swagger UI (`POST /contracts/upload`).
-2. Open the Streamlit dashboard and enter the old contract number.
+**Typical workflow (all in the dashboard):**
+1. Upload a legacy contract PDF and click **Extract & save client data**. The extracted fields are shown and saved to the database.
+2. The contract number is filled in automatically. Click **Generate PDF Contract**.
 3. Download the generated upsell contract.
+
+A sample contract to try is in `app/tests/fixtures/test_contract.pdf`.
 
 ## 6. Testing
 
