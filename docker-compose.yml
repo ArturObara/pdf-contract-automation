@@ -1,4 +1,5 @@
-version: '3.8'
+# Defaults below let `docker compose up` work without a .env file.
+# Override any of them in .env (see .env.example).
 
 services:
   db:
@@ -6,35 +7,43 @@ services:
     container_name: pv_postgres_db
     restart: always
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER:-pv_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pv_password}
+      POSTGRES_DB: ${POSTGRES_DB:-pv_contracts}
     ports:
-      - "${POSTGRES_PORT}:5432"
+      - "${POSTGRES_PORT:-5433}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 5s
       timeout: 5s
       retries: 5
-      
+
   web:
     build: .
     container_name: pv_fastapi_app
     restart: always
+    # Applies Alembic migrations, then starts uvicorn (see scripts/start-api.sh)
+    command: sh scripts/start-api.sh
     ports:
       - "8000:8000"
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER:-pv_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pv_password}
+      POSTGRES_DB: ${POSTGRES_DB:-pv_contracts}
       POSTGRES_HOST: db
       POSTGRES_PORT: 5432
-      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
     depends_on:
       db:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/')"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
 
   ui:
     build: .
@@ -46,7 +55,8 @@ services:
       - API_URL=http://web:8000
     command: streamlit run ui/app.py --server.port 8501 --server.address 0.0.0.0
     depends_on:
-      - web
+      web:
+        condition: service_healthy
 
 volumes:
   postgres_data:
